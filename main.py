@@ -63,47 +63,46 @@ def total(Year):
         for medal, count in results.items():
             print(f'\t{medal} - {count}')
 
-def overall(line, overall_dict):
-    olympic_info = line.split('\t')
-    for i in overall_dict:
-        if i == olympic_info[6] and olympic_info[14] != 'NA\n':
-            overall_dict[i] = overall_dict[i] + olympic_info[9] + ';'
+
+def overall(overall_dict):
+    with args.infile as file:
+        next_line = file.readline()
+        while next_line != '':
+            next_line = file.readline()
+            olympic_info = next_line.split('\t')
+            for i in overall_dict:
+                if next_line != '':
+                    if i == olympic_info[6] and olympic_info[14] != 'NA\n':
+                        overall_dict[i] = overall_dict[i] + olympic_info[9] + ';'
+        for i in overall_dict:
+            year_max = 0
+            medals_count = 0
+            years = overall_dict[i].split(';')
+            for j in range(1910,2023):
+                if years.count(str(j)) > medals_count: 
+                    medals_count = years.count(str(j))
+                    year_max = j
+            print(i,year_max, medals_count)  
     return overall_dict
 
 
 args = parser.parse_args()
 
-
-
     
     
-if args.overall is not None:
-    overall_dict = dict.fromkeys(args.overall,'')
 if args.total is not None:
-        a = total(args.total[0])
+        total(args.total[0])
 
 if args.medals is not None:     
     sport_info = medals(args.medals[0], args.medals[1])
 
-#if args.overall is not None:
-            #next_line = file.readline()
-            #if next_line !='': overall_dict = overall(next_line,overall_dict)
-    
 if args.output is not None:
     names = sport_info['Name_disc_medal'].split(';')
     for name in names:
         args.output.writelines(name)
     args.output.writelines(str(sport_info['Gold'])+' '+str(sport_info['Silver'])+' '+str(sport_info['Bronze'])) 
 
-
-    if args.overall is not None:
-        for i in overall_dict:
-            year_max = 0
-            medals_count = 0
-            years = overall_dict[i].split(';')
-            print(years)
-            for j in range(1910,2023):
-                if years.count(str(j)) > medals_count: 
-                    medals_count = years.count(str(j))
-                    year_max = j
-            print(i,year_max, medals_count)    
+if args.overall is not None:
+    overall_dict = dict.fromkeys(args.overall,'')
+    a = overall(overall_dict)
+    
