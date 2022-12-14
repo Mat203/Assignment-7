@@ -51,4 +51,14 @@ with args.infile as file:
             args.output.writelines(name)
         args.output.writelines(str(sport_info['Gold'])+' '+str(sport_info['Silver'])+' '+str(sport_info['Bronze']))
     if sport_info['amount'] == 0 and args.medals is not None:
-        print('В обраний рік країна не брала участі в олімпіаді')      
+        print('В обраний рік країна не брала участі в олімпіаді')     
+    if args.overall is not None:
+        for i in overall_dict:
+            year_max = 0
+            medals_count = 0
+            years = overall_dict[i].split(';')
+            for j in range(1910,2023):
+                if years.count(str(j)) > medals_count: 
+                    medals_count = years.count(str(j))
+                    year_max = j
+            print(i,year_max, medals_count)    
