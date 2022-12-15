@@ -178,7 +178,7 @@ if args.interactive is not None:
     a = interactive()
     
 if args.total is not None:
-        total(args.total[0])
+    total(args.total[0])
 
 if args.medals is not None:     
     sport_info = medals(args.medals[0], args.medals[1])
