@@ -13,23 +13,23 @@ def medals(country, year):
         next_line = file.readline()
 
         sport_info = {'amount': 0, 'Gold': 0, 'Silver': 0, 'Bronze': 0, 'Name_disc_medal':''}
+        next_line = file.readline()
 
         while next_line != '':
-            next_line = file.readline()
             olympic_info = next_line.split('\t')
+            a = olympic_info[6] == country or olympic_info[7] == country
+            b = olympic_info[9] == year
+            c = olympic_info[14] != 'NA\n'
             if sport_info['amount'] < 10:
-
-                a = olympic_info[6] == country or olympic_info[7] == country
-                b = olympic_info[9] == year
-                c = olympic_info[14] != 'NA\n'
-
+                
                 if a and b and c:
                     print(olympic_info[1], olympic_info[12],olympic_info[14])
                     sport_info['Name_disc_medal'] = sport_info['Name_disc_medal']+olympic_info[1]+' '+olympic_info[12] +' '+olympic_info[14]+'; '
                     sport_info['amount'] += 1 
-                    if olympic_info[14] == 'Gold\n': sport_info['Gold'] += 1 
-                    if olympic_info[14] == 'Silver\n': sport_info['Silver'] += 1
-                    if olympic_info[14] == 'Bronze\n': sport_info['Bronze'] += 1
+            if olympic_info[14] == 'Gold\n' and a and b: sport_info['Gold'] += 1 
+            if olympic_info[14] == 'Silver\n' and a and b: sport_info['Silver'] += 1
+            if olympic_info[14] == 'Bronze\n' and a and b: sport_info['Bronze'] += 1
+            next_line = file.readline()
         if sport_info['amount'] == 0:
             print('В обраний рік країна не брала участі в олімпіаді')
         else:    
@@ -192,5 +192,3 @@ if args.output is not None:
 if args.overall is not None:
     overall_dict = dict.fromkeys(args.overall,'')
     a = overall(overall_dict)
-
-    
