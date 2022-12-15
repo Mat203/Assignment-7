@@ -1,7 +1,7 @@
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('infile', type=argparse.FileType('r'))
+parser.add_argument('infile')
 parser.add_argument('-medals', dest='medals', nargs=2)
 parser.add_argument('-output', '--output', type=argparse.FileType('w', encoding='UTF-8'))
 parser.add_argument('-overall', nargs='*')
@@ -9,7 +9,7 @@ parser.add_argument('-total', nargs=1)
 parser.add_argument('-interactive')
 
 def medals(country, year):
-    with args.infile as file:
+    with open(args.infile, 'r') as file:
         next_line = file.readline()
 
         sport_info = {'amount': 0, 'Gold': 0, 'Silver': 0, 'Bronze': 0, 'Name_disc_medal':''}
@@ -21,7 +21,7 @@ def medals(country, year):
             b = olympic_info[9] == year
             c = olympic_info[14] != 'NA\n'
             if sport_info['amount'] < 10:
-                
+
                 if a and b and c:
                     print(olympic_info[1], olympic_info[12],olympic_info[14])
                     sport_info['Name_disc_medal'] = sport_info['Name_disc_medal']+olympic_info[1]+' '+olympic_info[12] +' '+olympic_info[14]+'; '
@@ -38,7 +38,7 @@ def medals(country, year):
 
 def total(Year):
     totalInfo = dict()
-    with args.infile as file:
+    with open(args.infile,'r') as file:
         line = file.readline()
 
         while line:
@@ -58,7 +58,7 @@ def total(Year):
                         totalInfo[country]=dict()
                         totalInfo[country][medal] = 1
             line = file.readline()
-    
+    print (totalInfo)
     for countryName, results in totalInfo.items():
         print(f'{countryName}')
         for medal, count in results.items():
@@ -66,7 +66,7 @@ def total(Year):
 
 
 def overall(overall_dict):
-    with args.infile as file:
+    with open(args.infile,'r') as file:
         next_line = file.readline()
         while next_line != '':
             next_line = file.readline()
@@ -94,7 +94,7 @@ def interactive():
             break
         
         countryTotalInfo=dict()
-        with args.infile as file:
+        with open(args.infile,'r') as file:
             line = file.readline()
             while line:
                 line = line[:-1]
